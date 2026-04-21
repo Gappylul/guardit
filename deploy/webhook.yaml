@@ -1,0 +1,86 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: guardit
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: guardit-policy
+  namespace: guardit
+data:
+  guardit.yaml: |
+    apiVersion: guardit.gappy.hu/v1
+    kind: Policy
+    metadata:
+      name: homelab
+    spec:
+      replicaLimit: 5
+      allowedRegistries:
+        - ghcr.io/gappylul
+      requiredLabels:
+        - app
+      requireResourceLimits: false
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: guardit
+  namespace: guardit
+  labels:
+    app: guardit
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: guardit
+  template:
+    metadata:
+      labels:
+        app: guardit
+    spec:
+      containers:
+        - name: guardit
+          image: ghcr.io/gappylul/guardit:latest
+          ports:
+            - containerPort: 8443
+          env:
+            - name: TLS_CERT_FILE
+              value: /tls/tls.crt
+            - name: TLS_KEY_FILE
+              value: /tls/tls.key
+            - name: GUARDIT_POLICY
+              value: /etc/guardit/guardit.yaml
+          volumeMounts:
+            - name: tls
+              mountPath: /tls
+              readOnly: true
+            - name: policy
+              mountPath: /etc/guardit
+              readOnly: true
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 64Mi
+      volumes:
+        - name: tls
+          secret:
+            secretName: guardit-tls
+        - name: policy
+          configMap:
+            name: guardit-policy
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: guardit
+  namespace: guardit
+spec:
+  selector:
+    app: guardit
+  ports:
+    - port: 443
+      targetPort: 8443
