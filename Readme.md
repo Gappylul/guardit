@@ -38,12 +38,11 @@ Two enforcement points. The SDK check in `deployit` is fast - pure local CPU, no
 
 ### Architecture
 
-| Part | Location | Role |
-|---|---|---|
-| Engine (`internal/policy`) | Shared | The brain. Contains all rules and the logic to say yes or no. |
-| Webhook (`cmd/guardit`) | On the Pi | The enforcer. An HTTPS server Kubernetes calls on every deployment. |
-| CLI (`cmd/guard-cli`) | Your laptop | The linter. Check a manifest against your policy before applying it. |
-| SDK (`pkg/sdk`) | Library | The contract. What `deployit` imports to run checks locally. |
+| Part                       | Location    | Role                                                                 |
+|----------------------------|-------------|----------------------------------------------------------------------|
+| Webhook (`cmd/guardit`)    | On the Pi   | The enforcer. An HTTPS server Kubernetes calls on every deployment.  |
+| CLI (`cmd/guard-cli`)      | Your laptop | The linter. Check a manifest against your policy before applying it. |
+| SDK (`pkg/sdk`)            | Library     | The contract. What `deployit` imports to run checks locally.         |
 
 ### Installation
 
@@ -244,6 +243,6 @@ guardit is one piece of a larger self-hosted platform:
 - **[deployit](https://github.com/gappylul/deployit)** - deploy any project to your cluster with one command
 - **[flagd](https://github.com/gappylul/flagd)** - feature flag server, Redis-backed, zero config
 - **[terraform-provider-flagd](https://github.com/gappylul/terraform-provider-flagd)** - manage feature flags as code
-- **guardit** - policy enforcement so none of the above can misbehave
+- **[guardit](https://github.com/gappylul/guardit)** - policy enforcement so none of the above can misbehave
 
 Recommended stack: Raspberry Pi 5, k3s, Traefik, Cloudflare Tunnel, Tailscale.
