@@ -3,6 +3,7 @@ package sdk
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -43,16 +44,10 @@ func PolicySource() string {
 	if path := os.Getenv("GUARDIT_POLICY"); path != "" {
 		return path
 	}
-	cwd, _ := os.Getwd()
-	for _, name := range []string{"guardit.yaml", "guardit.yml"} {
-		if _, err := os.Stat(cwd + "/" + name); err == nil {
-			return cwd + "/" + name
-		}
-	}
 	if home, err := os.UserHomeDir(); err == nil {
 		for _, name := range []string{"guardit.yaml", "guardit.yml"} {
-			if _, err := os.Stat(home + "/" + name); err == nil {
-				return home + "/" + name
+			if _, err := os.Stat(filepath.Join(home, name)); err == nil {
+				return filepath.Join(home, name)
 			}
 		}
 	}
@@ -76,11 +71,6 @@ func FormatViolations(result Result) string {
 func resolvePolicy() (*Policy, error) {
 	if path := os.Getenv("GUARDIT_POLICY"); path != "" {
 		return LoadFromFile(path)
-	}
-	if cwd, err := os.Getwd(); err == nil {
-		if p, err := Discover(cwd); err == nil {
-			return p, nil
-		}
 	}
 	if home, err := os.UserHomeDir(); err == nil {
 		if p, err := Discover(home); err == nil {
