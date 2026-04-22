@@ -18,6 +18,7 @@ data:
       replicaLimit: 5
       allowedRegistries:
         - ghcr.io/gappylul
+        - docker.io/library
       requiredLabels:
         - app
       requireResourceLimits: false
