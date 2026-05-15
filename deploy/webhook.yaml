@@ -24,8 +24,7 @@ data:
         - quay.io/spinkube
         - registry.k8s.io
         - ghcr.io/spinkube
-      requiredLabels:
-        - app
+      requiredLabels: []
       requireResourceLimits: false
 ---
 apiVersion: apps/v1
