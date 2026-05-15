@@ -84,6 +84,10 @@ func admit(req *admissionv1.AdmissionRequest, p *sdk.Policy) *admissionv1.Admiss
 		return denyWith("ParseError", fmt.Sprintf("could not parse Deployment: %v", err))
 	}
 
+	if deployment.Labels["app.kubernetes.io/managed-by"] == "Helm" {
+		return &admissionv1.AdmissionResponse{Allowed: true}
+	}
+
 	dreq := sdk.FromDeployment(&deployment)
 	result := sdk.Evaluate(p, dreq)
 

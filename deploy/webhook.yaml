@@ -19,6 +19,10 @@ data:
       allowedRegistries:
         - ghcr.io/gappylul
         - docker.io/library
+        - docker.io/bitnami
+        - quay.io/jetstack
+        - quay.io/spinkube
+        - registry.k8s.io
       requiredLabels:
         - app
       requireResourceLimits: false
