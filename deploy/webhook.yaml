@@ -23,6 +23,7 @@ data:
         - quay.io/jetstack
         - quay.io/spinkube
         - registry.k8s.io
+        - ghcr.io/spinkube
       requiredLabels:
         - app
       requireResourceLimits: false
